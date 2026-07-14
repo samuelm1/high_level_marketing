@@ -3,4 +3,4 @@ uvicorn
 gunicorn
 sqlalchemy
 google-genai
-pydantic
+pydantic[email]
