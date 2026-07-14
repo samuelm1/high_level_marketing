@@ -89,6 +89,11 @@ def notify_client_of_lead(lead_id: int, lead_name: str, lead_phone: str):
     # Implement actual email/SMS API call here (e.g., SendGrid, Twilio)
 
 # --- Live Routing API ---
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the High Level Marketing API!"}
+
+    
 @app.post("/api/v1/leads")
 async def process_and_save_lead(
     lead_data: LeadCreate, 
