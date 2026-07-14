@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Engine Sandbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="border-b border-slate-800 pb-4 mb-8">
+            <h1 class="text-3xl font-bold text-emerald-400">Direct Loan Acquisition & Arbitrage Router</h1>
+            <p class="text-slate-400 mt-1">Live Technical Demo Pipeline for CA, TX, & FL Operations</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Form Card -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-semibold mb-4 text-slate-200">Simulate Lead Intake Form</h2>
+                <form id="leadForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Lead Classification</label>
+                        <select id="lead_type" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" onchange="toggleB2BFields()">
+                            <option value="B2C">B2C (Consumer Emergency - Car, Home, Medical)</option>
+                            <option value="B2B">B2B (Business / Merchant Cash Advance)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Full Name / Company</label>
+                            <input type="text" id="fullname" value="John Doe" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">State</label>
+                            <select id="state" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white">
+                                <option value="TX">Texas (TX)</option>
+                                <option value="CA">California (CA)</option>
+                                <option value="FL">Florida (FL)</option>
+                                <option value="NY">Out of Territory (e.g., NY)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Email</label>
+                            <input type="email" id="email" value="john@example.com" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Phone</label>
+                            <input type="text" id="phone" value="555-019-2831" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Requested Capital ($)</label>
+                            <input type="number" id="requested_amount" value="5000" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">FICO Credit Score</label>
+                            <input type="number" id="credit_score" value="650" min="300" max="850" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white" required>
+                        </div>
+                    </div>
+
+                    <div id="b2bFields" class="hidden bg-slate-800/50 p-3 border border-slate-700 rounded">
+                        <label class="block text-sm font-medium mb-1 text-emerald-400">Verifiable Monthly Business Revenue ($)</label>
+                        <input type="number" id="monthly_revenue" value="0" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Emergency Funding Purpose</label>
+                        <select id="loan_purpose" class="w-full bg-slate-700 border border-slate-600 rounded p-2 text-white">
+                            <option value="car_repair">Urgent Vehicle Maintenance</option>
+                            <option value="home_repair">Emergency HVAC / Property Damage</option>
+                            <option value="medical">Immediate Medical Bills</option>
+                            <option value="payday">Short-term Payday Gap Bridging</option>
+                            <option value="working_capital">Business Operational Float</option>
+                        </select>
+                    </div>
+
+                    <button type="button" onclick="submitLead()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold py-3 px-4 rounded transition duration-200">
+                        Process Lead Through Routing Pipeline
+                    </button>
+                </form>
+            </div>
+
+            <!-- Execution Engine Logs / Results Output -->
+            <div class="flex flex-col space-y-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl flex-1">
+                    <h2 class="text-xl font-semibold mb-4 text-slate-200">Real-Time Routing Diagnostics</h2>
+                    <div id="outputLog" class="bg-slate-950 p-4 rounded font-mono text-xs text-slate-400 h-64 overflow-y-auto space-y-2 border border-slate-900">
+                        <span class="text-slate-500">// Engine idle. Waiting for form injection...</span>
+                    </div>
+                </div>
+                
+                <div id="decisionCard" class="hidden p-6 rounded-xl border shadow-xl transition-all duration-300">
+                    <h3 class="text-lg font-bold tracking-wide uppercase" id="decisionTitle">Routing Verdict</h3>
+                    <p class="text-2xl font-black mt-2" id="decisionDest"></p>
+                    <p class="text-sm mt-2 text-slate-300" id="decisionReason"></p>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center">
+                        <span class="text-xs uppercase font-semibold text-white/60">Yield Dynamic Value</span>
+                        <span class="text-xl font-bold text-white" id="decisionValue"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleB2BFields() {
+            const type = document.getElementById('lead_type').value;
+            const b2bFields = document.getElementById('b2bFields');
+            if(type === 'B2B') {
+                b2bFields.classList.remove('hidden');
+                if(document.getElementById('monthly_revenue').value == "0") {
+                    document.getElementById('monthly_revenue').value = "8500";
+                }
+            } else {
+                b2bFields.classList.add('hidden');
+            }
+        }
+
+        async function submitLead() {
+            const log = document.getElementById('outputLog');
+            const card = document.getElementById('decisionCard');
+            
+            log.innerHTML = `<span class="text-amber-400">[PING] Packaging form payloads...</span><br>`;
+            
+            const payload = {
+                lead_type: document.getElementById('lead_type').value,
+                fullname: document.getElementById('fullname').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                state: document.getElementById('state').value,
+                requested_amount: parseFloat(document.getElementById('requested_amount').value),
+                credit_score: parseInt(document.getElementById('credit_score').value),
+                monthly_revenue: parseFloat(document.getElementById('monthly_revenue').value || 0),
+                loan_purpose: document.getElementById('loan_purpose').value
+            };
+
+            log.innerHTML += `<span class="text-emerald-400">[POST] Sending to backend rules array...</span><br>`;
+            
+            try {
+                // Change URL if you deploy your FastAPI app to a service like Render
+                const response = await fetch('http://127.0.0.1:8000/api/route-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const res = await response.json();
+                log.innerHTML += `<span class="text-blue-400">[RESPONSE] Engine parsed completely. Status code: 200</span><br>`;
+                log.innerHTML += `<span class="text-slate-300">${JSON.stringify(res, null, 2)}</span>`;
+                
+                card.classList.remove('hidden', 'bg-emerald-600', 'border-emerald-500', 'bg-amber-600', 'border-amber-500', 'text-slate-900', 'text-white');
+                
+                if (res.status === 'CLIENT_DIRECT_FUNDING') {
+                    card.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-200');
+                    document.getElementById('decisionTitle').innerText = "Direct Funded Lead (High Value)";
+                    document.getElementById('decisionDest').innerText = "🏦 " + res.destination;
+                    document.getElementById('decisionValue').innerText = res.estimated_value;
+                } else {
+                    card.classList.add('bg-amber-950', 'border-amber-600', 'text-amber-200');
+                    document.getElementById('decisionTitle').innerText = "Arbitrage Monetized (Instant Sale)";
+                    document.getElementById('decisionDest').innerText = "💰 " + res.destination;
+                    document.getElementById('decisionValue').innerText = res.estimated_payout;
+                }
+                document.getElementById('decisionReason').innerText = res.reason;
+
+            } catch (err) {
+                log.innerHTML += `<span class="text-red-500">[ERROR] Connection failed. Is app.py running locally? ${err}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
