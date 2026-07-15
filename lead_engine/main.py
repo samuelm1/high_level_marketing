@@ -79,7 +79,6 @@ class LeadCreateSchema(BaseModel):
 
 # API Response schema aligning perfectly with UI Frontend elements
 class LeadResponseSchema(BaseModel):
-    import os
     import sys
     import datetime
     from typing import Optional
