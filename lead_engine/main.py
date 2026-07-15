@@ -67,7 +67,7 @@ class LeadRecord(Base):
 
 # Request Validation schemas ensuring strict API ingestion security
 class LeadCreateSchema(BaseModel):
-    lead_type: str = Field(..., regex="^(B2C|B2B)$", description="Loan Category Toggle State")
+    lead_type: str = Field(..., pattern="^(B2C|B2B)$", description="Loan Category Toggle State")
     fullname: str = Field(..., min_length=2, max_length=255, description="Borrower Full Name or Registered Company")
     email: EmailStr = Field(..., description="Secure Contact Email Address")
     phone: str = Field(..., min_length=7, max_length=50, description="Formatted Security Telephone String")
@@ -86,7 +86,7 @@ class LeadResponseSchema(BaseModel):
     created_at: datetime.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 def evaluate_underwriting_and_route(lead: LeadCreateSchema) -> tuple:
     """
