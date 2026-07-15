@@ -79,56 +79,56 @@ class LeadCreateSchema(BaseModel):
 
 # API Response schema aligning perfectly with UI Frontend elements
 class LeadResponseSchema(BaseModel):
-import os
-import sys
-import datetime
-from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+    import os
+    import sys
+    import datetime
+    from typing import Optional
+    from fastapi import FastAPI, Depends, HTTPException, status
+    from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import HTMLResponse
+    from pydantic import BaseModel, EmailStr, Field
+    from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text, text
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker, Session
 
-# =====================================================================
-# PYDANTIC MULTI-VERSION COMPATIBILITY SAFEGUARD
-# =====================================================================
-# Auto-detects whether the host system is running Pydantic V1 or V2
-# to prevent "unexpected keyword argument 'pattern'" validation crashes.
-import pydantic
-IS_PYDANTIC_V2 = pydantic.__version__.startswith("2")
-lead_type_constraints = {"pattern": "^(B2C|B2B)$"} if IS_PYDANTIC_V2 else {"regex": "^(B2C|B2B)$"}
+    # =====================================================================
+    # PYDANTIC MULTI-VERSION COMPATIBILITY SAFEGUARD
+    # =====================================================================
+    # Auto-detects whether the host system is running Pydantic V1 or V2
+    # to prevent "unexpected keyword argument 'pattern'" validation crashes.
+    import pydantic
+    IS_PYDANTIC_V2 = pydantic.__version__.startswith("2")
+    lead_type_constraints = {"pattern": "^(B2C|B2B)$"} if IS_PYDANTIC_V2 else {"regex": "^(B2C|B2B)$"}
 
-# =====================================================================
-# PRODUCTION DATABASE CONFIGURATION
-# =====================================================================
-DATABASE_URL = os.environ.get("DATABASE_URL")
-USING_SQLITE_FALLBACK = False
+    # =====================================================================
+    # PRODUCTION DATABASE CONFIGURATION
+    # =====================================================================
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    USING_SQLITE_FALLBACK = False
 
-if not DATABASE_URL:
-    print("[WARNING] DATABASE_URL environment variable is missing. Falling back to local SQLite 'leads.db' for development safety.", file=sys.stderr)
-    DATABASE_URL = "sqlite:///./leads.db"
-    USING_SQLITE_FALLBACK = True
-else:
-    if DATABASE_URL.startswith("postgres://"):
-        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
-    print(f"[INIT] Securely targeting PostgreSQL Engine at endpoint: {DATABASE_URL.split('@')[-1] if '@' in DATABASE_URL else DATABASE_URL}")
+    if not DATABASE_URL:
+        print("[WARNING] DATABASE_URL environment variable is missing. Falling back to local SQLite 'leads.db' for development safety.", file=sys.stderr)
+        DATABASE_URL = "sqlite:///./leads.db"
+        USING_SQLITE_FALLBACK = True
+    else:
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        print(f"[INIT] Securely targeting PostgreSQL Engine at endpoint: {DATABASE_URL.split('@')[-1] if '@' in DATABASE_URL else DATABASE_URL}")
 
-if "sqlite" in DATABASE_URL:
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-    USING_SQLITE_FALLBACK = True
-else:
-    engine = create_engine(
-        DATABASE_URL, 
-        pool_size=10, 
-        max_overflow=20, 
-        pool_recycle=1800,
-        pool_pre_ping=True
-    )
+    if "sqlite" in DATABASE_URL:
+        engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+        USING_SQLITE_FALLBACK = True
+    else:
+        engine = create_engine(
+            DATABASE_URL, 
+            pool_size=10, 
+            max_overflow=20, 
+            pool_recycle=1800,
+            pool_pre_ping=True
+        )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Base = declarative_base()
 
 # =====================================================================
 # DATABASE MODELS
