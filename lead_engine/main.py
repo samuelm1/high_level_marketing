@@ -302,19 +302,20 @@ def root_dashboard(db: Session = Depends(get_db)):
 @app.get("/admin/leads", response_class=HTMLResponse)
 def view_leads_admin(db: Session = Depends(get_db)):
     """
-    Renders a professional admin dashboard table of all leads.
+    Renders an interactive admin dashboard with search filtering.
     """
     leads = db.query(LeadRecord).order_by(LeadRecord.created_at.desc()).all()
     
     rows = ""
     for lead in leads:
-        # Determine styling based on verdict
         status_color = "emerald" if lead.routing_verdict == "DIRECT_TO_CLIENT" else "amber"
         
         rows += f"""
         <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
             <td class="p-4 text-xs font-mono text-slate-500">#{lead.id}</td>
             <td class="p-4 text-sm font-bold text-slate-200">{lead.fullname}</td>
+            <td class="p-4 text-sm text-slate-400">{lead.email}</td>
+            <td class="p-4 text-sm text-slate-400">{lead.phone}</td>
             <td class="p-4 text-sm text-slate-400">{lead.lead_type}</td>
             <td class="p-4 text-sm text-slate-400">{lead.state}</td>
             <td class="p-4 text-sm font-semibold text-emerald-400">${lead.requested_amount:,.2f}</td>
@@ -335,31 +336,47 @@ def view_leads_admin(db: Session = Depends(get_db)):
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
         <title>Lead Admin Dashboard</title>
+        <script>
+            function filterTable() {{
+                const input = document.getElementById("searchInput");
+                const filter = input.value.toLowerCase();
+                const table = document.getElementById("leadsTable");
+                const tr = table.getElementsByTagName("tr");
+
+                for (let i = 1; i < tr.length; i++) {{
+                    const text = tr[i].textContent || tr[i].innerText;
+                    tr[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+                }}
+            }}
+        </script>
     </head>
     <body class="bg-slate-950 text-slate-200 p-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Lead Pipeline Administration</h1>
-                <!-- Refresh and Navigation Buttons -->
                 <div class="flex gap-2">
-                    <button onclick="window.location.reload()" class="text-xs bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-white font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/20 transition">
-                        <span class="material-icons text-sm">refresh</span> Refresh
+                    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search leads..." 
+                        class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none w-64 transition">
+                    <button onclick="window.location.reload()" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-white font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/20 transition">
+                        <span class="material-icons text-sm">refresh</span>
                     </button>
-                    <a href="/" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 font-bold transition">Back to Intake</a>
+                    <a href="/" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 font-bold transition">Back</a>
                 </div>
             </div>
             
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-                <table class="w-full text-left border-collapse">
+                <table id="leadsTable" class="w-full text-left border-collapse">
                     <thead class="bg-slate-950 text-slate-500 uppercase text-[10px] tracking-widest">
                         <tr>
                             <th class="p-4">ID</th>
-                            <th class="p-4">Borrower</th>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Email</th>
+                            <th class="p-4">Phone</th>
                             <th class="p-4">Type</th>
                             <th class="p-4">State</th>
                             <th class="p-4">Request</th>
                             <th class="p-4">Verdict</th>
-                            <th class="p-4">Timestamp</th>
+                            <th class="p-4">Time</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800">
