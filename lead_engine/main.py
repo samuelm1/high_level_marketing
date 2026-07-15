@@ -8,6 +8,7 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+import pydantic
 
 # =====================================================================
 # PRODUCTION DATABASE CONFIGURATION
@@ -79,22 +80,12 @@ class LeadCreateSchema(BaseModel):
 
 # API Response schema aligning perfectly with UI Frontend elements
 class LeadResponseSchema(BaseModel):
-    import datetime
-    from typing import Optional
-    from fastapi import FastAPI, Depends, HTTPException, status
-    from fastapi.middleware.cors import CORSMiddleware
-    from fastapi.responses import HTMLResponse
-    from pydantic import BaseModel, EmailStr, Field
-    from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text, text
-    from sqlalchemy.ext.declarative import declarative_base
-    from sqlalchemy.orm import sessionmaker, Session
 
     # =====================================================================
     # PYDANTIC MULTI-VERSION COMPATIBILITY SAFEGUARD
     # =====================================================================
     # Auto-detects whether the host system is running Pydantic V1 or V2
     # to prevent "unexpected keyword argument 'pattern'" validation crashes.
-    import pydantic
     IS_PYDANTIC_V2 = pydantic.__version__.startswith("2")
     lead_type_constraints = {"pattern": "^(B2C|B2B)$"} if IS_PYDANTIC_V2 else {"regex": "^(B2C|B2B)$"}
 
