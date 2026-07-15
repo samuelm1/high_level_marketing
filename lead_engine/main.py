@@ -299,6 +299,79 @@ def root_dashboard(db: Session = Depends(get_db)):
     """
     return HTMLResponse(content=html_content, status_code=200)
 
+@app.get("/admin/leads", response_class=HTMLResponse)
+def view_leads_admin(db: Session = Depends(get_db)):
+    """
+    Renders a professional admin dashboard table of all leads.
+    """
+    leads = db.query(LeadRecord).order_by(LeadRecord.created_at.desc()).all()
+    
+    rows = ""
+    for lead in leads:
+        # Determine styling based on verdict
+        status_color = "emerald" if lead.routing_verdict == "DIRECT_TO_CLIENT" else "amber"
+        
+        rows += f"""
+        <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition">
+            <td class="p-4 text-xs font-mono text-slate-500">#{lead.id}</td>
+            <td class="p-4 text-sm font-bold text-slate-200">{lead.fullname}</td>
+            <td class="p-4 text-sm text-slate-400">{lead.lead_type}</td>
+            <td class="p-4 text-sm text-slate-400">{lead.state}</td>
+            <td class="p-4 text-sm font-semibold text-emerald-400">${lead.requested_amount:,.2f}</td>
+            <td class="p-4">
+                <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-{status_color}-950 text-{status_color}-400 border border-{status_color}-500/30">
+                    {lead.routing_verdict.replace('_', ' ')}
+                </span>
+            </td>
+            <td class="p-4 text-xs text-slate-500">{lead.created_at.strftime('%Y-%m-%d %H:%M')}</td>
+        </tr>
+        """
+
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <title>Lead Admin Dashboard</title>
+    </head>
+    <body class="bg-slate-950 text-slate-200 p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold text-white">Lead Pipeline Administration</h1>
+                <!-- Refresh and Navigation Buttons -->
+                <div class="flex gap-2">
+                    <button onclick="window.location.reload()" class="text-xs bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-white font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/20 transition">
+                        <span class="material-icons text-sm">refresh</span> Refresh
+                    </button>
+                    <a href="/" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 font-bold transition">Back to Intake</a>
+                </div>
+            </div>
+            
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-950 text-slate-500 uppercase text-[10px] tracking-widest">
+                        <tr>
+                            <th class="p-4">ID</th>
+                            <th class="p-4">Borrower</th>
+                            <th class="p-4">Type</th>
+                            <th class="p-4">State</th>
+                            <th class="p-4">Request</th>
+                            <th class="p-4">Verdict</th>
+                            <th class="p-4">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
 @app.get("/api/v1/leads")
 def get_all_leads(db: Session = Depends(get_db)):
     """
