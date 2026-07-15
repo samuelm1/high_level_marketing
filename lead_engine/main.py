@@ -299,6 +299,15 @@ def root_dashboard(db: Session = Depends(get_db)):
     """
     return HTMLResponse(content=html_content, status_code=200)
 
+@app.get("/api/v1/leads")
+def get_all_leads(db: Session = Depends(get_db)):
+    """
+    Returns all leads stored in the database.
+    Useful for verification and debugging.
+    """
+    leads = db.query(LeadRecord).all()
+    return leads
+
 @app.post("/api/v1/leads", response_model=LeadResponseSchema, status_code=status.HTTP_201_CREATED)
 def intake_secure_lead(lead_in: LeadCreateSchema, db: Session = Depends(get_db)):
     try:
