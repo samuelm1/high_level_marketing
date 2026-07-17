@@ -115,17 +115,9 @@ except Exception:
 # UNDERWRITING DECISION ENGINE
 # =====================================================================
 def evaluate_underwriting_and_route(lead: LeadCreateSchema) -> tuple:
-    eligible_territories = {"CA", "TX", "FL"}
+    # We have removed the 3-state restriction. All 50 states are now processed.
     state_upper = lead.state.strip().upper()
     
-    if state_upper not in eligible_territories:
-        return (
-            "ARBITRAGE_MARKETPLACE",
-            "Programmatic Marketplace (Affiliate Network)",
-            "$120.00 - $350.00",
-            f"Fallback routing triggered. Operational boundary exception for {state_upper} leads."
-        )
-
     if lead.lead_type == "B2B":
         min_credit = 600
         min_revenue = 10000.00
@@ -135,14 +127,14 @@ def evaluate_underwriting_and_route(lead: LeadCreateSchema) -> tuple:
                 "DIRECT_TO_CLIENT",
                 "Internal Direct Portfolio Lending Desk",
                 "Retained Yield: Premium (Commercial B2B Portfolio)",
-                f"Qualified Commercial B2B Account with credit {lead.credit_score} and monthly revenue ${lead.monthly_revenue:,.2f}."
+                f"Qualified Commercial B2B Account in {state_upper} with credit {lead.credit_score} and monthly revenue ${lead.monthly_revenue:,.2f}."
             )
         else:
             return (
-                "ARBITRAGE_MARKETPLACE",
-                "Fallback Programmatic Partner Net",
-                "$120.00 - $350.00",
-                f"Commercial criteria unfulfilled: Credit {lead.credit_score} (min: {min_credit}) or Revenue ${lead.monthly_revenue:,.2f} (min: ${min_revenue:,.2f})."
+                "HELD_IN_DATABASE", 
+                "Pending Client Review",
+                "TBD",
+                f"Commercial criteria unfulfilled in {state_upper}: Credit {lead.credit_score} (min: {min_credit}) or Revenue ${lead.monthly_revenue:,.2f} (min: ${min_revenue:,.2f})."
             )
             
     else:  # Consumer Personal Emergency B2C Portfolio
@@ -154,14 +146,14 @@ def evaluate_underwriting_and_route(lead: LeadCreateSchema) -> tuple:
                 "DIRECT_TO_CLIENT",
                 "Internal Direct Portfolio Lending Desk",
                 "Retained Yield: Premium (Personal B2C Portfolio)",
-                f"Qualified Personal B2C profile. Approved credit index score {lead.credit_score} with low-leverage request value."
+                f"Qualified Personal B2C profile in {state_upper}. Approved credit index score {lead.credit_score} with low-leverage request value."
             )
         else:
             return (
-                "ARBITRAGE_MARKETPLACE",
-                "Programmatic Marketplace (Consumer Arbitrage Group)",
-                "$120.00 - $350.00",
-                f"Consumer thresholds adjusted: Credit {lead.credit_score} (min: {min_credit}) or requested value limits exceeded."
+                "HELD_IN_DATABASE",
+                "Pending Client Review",
+                "TBD",
+                f"Consumer thresholds adjusted in {state_upper}: Credit {lead.credit_score} (min: {min_credit}) or requested value limits exceeded."
             )
 
 # =====================================================================
