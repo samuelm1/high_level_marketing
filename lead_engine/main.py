@@ -10,12 +10,15 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 # DATABASE CONFIGURATION
 # ==========================================
 # Replace with your actual PostgreSQL URL
-SQLALCHEMY_DATABASE_URL = "postgresql://user:password@localhost:5432/leaddb" 
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://user:password@localhost:5432/leaddb")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# SQLAlchemy requires "postgresql://" but some providers use "postgres://"
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
 # SQLAlchemy Model
 class Lead(Base):
     __tablename__ = "leads"
