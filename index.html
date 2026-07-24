@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- SEO & Meta Tags -->
     <title>Fast Emergency Funding | Get Approved in Minutes</title>
-    <meta name="description" content="Secure, rapid emergency capital for businesses and individuals. Apply online in 2 minutes and get instant routing to premier lending partners.">
-    <meta name="keywords" content="emergency funding, fast business loan, personal capital, quick cash, secure lending">
-    <meta property="og:title" content="Fast Emergency Funding | Get Approved in Minutes">
-    <meta property="og:description" content="Secure, rapid emergency capital for businesses and individuals.">
-    <meta property="og:type" content="website">
     
-    <!-- Performance & Styling -->
+    <!-- Google tag (gtag.js) - GLOBAL SITE TAG -->
+    <!-- REPLACE 'AW-XXXXXXXXXX' WITH YOUR ACTUAL GOOGLE ADS ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Replace with your actual ID
+      gtag('config', 'AW-XXXXXXXXXX');
+    </script>
+    <!-- End Google tag -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -20,7 +26,6 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Forces mobile browsers to not zoom in on input focus */
         input, select { font-size: 16px !important; }
     </style>
 </head>
@@ -44,61 +49,40 @@
 
                 <div class="space-y-4">
                     <input type="text" id="fullname" placeholder="Full Legal Name" class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
-                    <input type="email" id="email" placeholder="Email Address" class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
-                    <input type="tel" id="phone" placeholder="Phone Number" class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
+                    
+                    <!-- Validated Email Input -->
+                    <input type="email" id="email" placeholder="Email Address" 
+                           pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                           title="Please enter a valid email address (e.g., name@domain.com)"
+                           class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
+                    
+                    <!-- Validated Phone Input -->
+                    <input type="tel" id="phone" placeholder="Phone Number" 
+                           maxlength="14"
+                           title="Please enter a valid 10-digit US phone number"
+                           class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
+                    
                     <div class="grid grid-cols-2 gap-4">
-                        <select id="state" class="w-full p-4 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-emerald-500 outline-none transition" required>
-                            <option value="" disabled selected>Select State</option>
-                            <option value="AL">Alabama (AL)</option>
-                            <option value="AK">Alaska (AK)</option>
-                            <option value="AZ">Arizona (AZ)</option>
-                            <option value="AR">Arkansas (AR)</option>
-                            <option value="CA">California (CA)</option>
-                            <option value="CO">Colorado (CO)</option>
-                            <option value="CT">Connecticut (CT)</option>
-                            <option value="DE">Delaware (DE)</option>
-                            <option value="FL">Florida (FL)</option>
-                            <option value="GA">Georgia (GA)</option>
-                            <option value="HI">Hawaii (HI)</option>
-                            <option value="ID">Idaho (ID)</option>
-                            <option value="IL">Illinois (IL)</option>
-                            <option value="IN">Indiana (IN)</option>
-                            <option value="IA">Iowa (IA)</option>
-                            <option value="KS">Kansas (KS)</option>
-                            <option value="KY">Kentucky (KY)</option>
-                            <option value="LA">Louisiana (LA)</option>
-                            <option value="ME">Maine (ME)</option>
-                            <option value="MD">Maryland (MD)</option>
-                            <option value="MA">Massachusetts (MA)</option>
-                            <option value="MI">Michigan (MI)</option>
-                            <option value="MN">Minnesota (MN)</option>
-                            <option value="MS">Mississippi (MS)</option>
-                            <option value="MO">Missouri (MO)</option>
-                            <option value="MT">Montana (MT)</option>
-                            <option value="NE">Nebraska (NE)</option>
-                            <option value="NV">Nevada (NV)</option>
-                            <option value="NH">New Hampshire (NH)</option>
-                            <option value="NJ">New Jersey (NJ)</option>
-                            <option value="NM">New Mexico (NM)</option>
-                            <option value="NY">New York (NY)</option>
-                            <option value="NC">North Carolina (NC)</option>
-                            <option value="ND">North Dakota (ND)</option>
-                            <option value="OH">Ohio (OH)</option>
-                            <option value="OK">Oklahoma (OK)</option>
-                            <option value="OR">Oregon (OR)</option>
-                            <option value="PA">Pennsylvania (PA)</option>
-                            <option value="RI">Rhode Island (RI)</option>
-                            <option value="SC">South Carolina (SC)</option>
-                            <option value="SD">South Dakota (SD)</option>
-                            <option value="TN">Tennessee (TN)</option>
-                            <option value="TX">Texas (TX)</option>
-                            <option value="UT">Utah (UT)</option>
-                            <option value="VT">Vermont (VT)</option>
-                            <option value="VA">Virginia (VA)</option>
-                            <option value="WA">Washington (WA)</option>
-                            <option value="WV">West Virginia (WV)</option>
-                            <option value="WI">Wisconsin (WI)</option>
-                            <option value="WY">Wyoming (WY)</option>
+                        <!-- Nationwide 50-State Dropdown -->
+                        <select id="state" class="w-full p-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white outline-none focus:ring-2 focus:ring-emerald-500 transition" required>
+                            <option value="" disabled selected>State</option>
+                            <option value="AL">AL</option><option value="AK">AK</option><option value="AZ">AZ</option>
+                            <option value="AR">AR</option><option value="CA">CA</option><option value="CO">CO</option>
+                            <option value="CT">CT</option><option value="DE">DE</option><option value="FL">FL</option>
+                            <option value="GA">GA</option><option value="HI">HI</option><option value="ID">ID</option>
+                            <option value="IL">IL</option><option value="IN">IN</option><option value="IA">IA</option>
+                            <option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option>
+                            <option value="ME">ME</option><option value="MD">MD</option><option value="MA">MA</option>
+                            <option value="MI">MI</option><option value="MN">MN</option><option value="MS">MS</option>
+                            <option value="MO">MO</option><option value="MT">MT</option><option value="NE">NE</option>
+                            <option value="NV">NV</option><option value="NH">NH</option><option value="NJ">NJ</option>
+                            <option value="NM">NM</option><option value="NY">NY</option><option value="NC">NC</option>
+                            <option value="ND">ND</option><option value="OH">OH</option><option value="OK">OK</option>
+                            <option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option>
+                            <option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option>
+                            <option value="TX">TX</option><option value="UT">UT</option><option value="VT">VT</option>
+                            <option value="VA">VA</option><option value="WA">WA</option><option value="WV">WV</option>
+                            <option value="WI">WI</option><option value="WY">WY</option>
                         </select>
                         <input type="number" id="requested_amount" placeholder="Amount ($)" class="w-full p-4 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white transition" required>
                     </div>
@@ -120,13 +104,20 @@
     </main>
 
     <script>
-        const API_BASE_URL = "https://high-level-marketing-1.onrender.com"; 
+        // REPLACE WITH YOUR PRODUCTION RENDER API URL
+        const API_BASE_URL = "https://your-api-url.onrender.com"; 
 
         function setLeadType(type) {
             document.getElementById('lead_type').value = type;
             document.getElementById('btnB2C').className = type === 'B2C' ? "py-3 rounded-xl font-semibold bg-white shadow-sm text-emerald-700 transition" : "py-3 rounded-xl font-semibold text-slate-500 transition";
             document.getElementById('btnB2B').className = type === 'B2B' ? "py-3 rounded-xl font-semibold bg-white shadow-sm text-emerald-700 transition" : "py-3 rounded-xl font-semibold text-slate-500 transition";
         }
+
+        // Auto-format phone number to (XXX) XXX-XXXX as the user types
+        document.getElementById('phone').addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
 
         const fetchWithTimeout = async (resource, options = {}) => {
             const { timeout = 60000 } = options; 
@@ -155,7 +146,7 @@
                 phone: document.getElementById('phone').value,
                 state: document.getElementById('state').value,
                 requested_amount: parseFloat(document.getElementById('requested_amount').value),
-                credit_score: 680, 
+                credit_score: 680, // Defaulting to standard credit assumptions unless captured
                 monthly_revenue: 0,
                 loan_purpose: "emergency"
             };
@@ -171,13 +162,23 @@
                 if (response.ok) {
                     feedback.className = "mt-6 p-4 rounded-xl text-center text-sm font-medium bg-emerald-50 text-emerald-700";
                     feedback.innerText = "Success! Your application has been securely routed.";
+                    
+                    // ==========================================
+                    // GOOGLE ADS CONVERSION EVENT TRIGGER
+                    // REPLACE 'AW-XXXXXXXXXX/YYYYYYYYYYYY' WITH YOUR SPECIFIC EVENT SNIPPET CODE
+                    // ==========================================
+                    gtag('event', 'conversion', {
+                        'send_to': 'AW-XXXXXXXXXX/YYYYYYYYYYYY'
+                    });
+                    
                     document.getElementById('leadCaptureForm').reset();
                 } else {
-                    throw new Error("Server rejected request");
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Server rejected request due to invalid data.");
                 }
             } catch (err) { 
                 feedback.className = "mt-6 p-4 rounded-xl text-center text-sm font-medium bg-red-50 text-red-700";
-                feedback.innerText = err.name === 'AbortError' ? "Connection timed out. Please try again." : "Transmission error. Please try again.";
+                feedback.innerText = err.name === 'AbortError' ? "Connection timed out. Please try again." : err.message;
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Check My Eligibility";
